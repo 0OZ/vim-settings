@@ -6,6 +6,7 @@ local plugins = {
     opts = {
       ensure_installed = {
         "gopls",
+        "rust-analyzer",
       },
     },
   },
@@ -50,10 +51,56 @@ local plugins = {
     end,
   },
   {
-     'echasnovski/mini.move', version = '*',
+    'echasnovski/mini.move',
+    version = '*',
    config = function ()
-    require('mini.move').setup()
-   end,
+      require('mini.move').setup()
+    end,
+    cmd = 'MiniMove',
+  },
+  {
+    "simrat39/rust-tools.nvim",
+    ft = "rust",
+    dependencies = "neovim/nvim-lspconfig",
+    opts = function ()
+      return require "custom.configs.lspconfig"
+    end,
+    config = function(_, opts)
+      require('rust-tools').setup(opts)
+    end
+  },
+  {
+    "mfussenegger/nvim-dap",
+    init = function()
+      require("core.utils").load_mappings("dap")
+    end
+  },
+  {
+    'saecki/crates.nvim',
+    ft = {"toml"},
+    config = function(_, opts)
+      local crates  = require('crates')
+      crates.setup(opts)
+      require('cmp').setup.buffer({
+        sources = { { name = "crates" }}
+      })
+      crates.show()
+      require("core.utils").load_mappings("crates")
+    end,
+  },
+  {
+    "rust-lang/rust.vim",
+    ft = "rust",
+    init = function ()
+      vim.g.rustfmt_autosave = 1
+    end
+  },
+  {
+    "theHamsta/nvim-dap-virtual-text",
+    lazy = false,
+    config = function(_)
+      require("nvim-dap-virtual-text").setup()
+    end
   },
   {
     "zbirenbaum/copilot.lua",
