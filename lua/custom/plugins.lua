@@ -53,7 +53,7 @@ local plugins = {
   {
     'echasnovski/mini.move',
     version = '*',
-   config = function ()
+    config = function ()
       require('mini.move').setup()
     end,
     cmd = 'MiniMove',
